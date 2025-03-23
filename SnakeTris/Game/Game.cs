@@ -19,7 +19,7 @@ public class Game(Field field, Snake snake, Food food)
     {
         field.Draw(frame);
         snake.Draw(frame);
-        food.Draw(frame);
+        // food.Draw(frame);
     }
 
     private void Subscribe()
@@ -31,6 +31,7 @@ public class Game(Field field, Snake snake, Food food)
 
     private void Update()
     {
+        snake.Update();
     }
 
     private void Action(ActionKey key)
@@ -38,16 +39,10 @@ public class Game(Field field, Snake snake, Food food)
         switch (key)
         {
             case ActionKey.Up: 
-                field.Up(); 
-                break;
             case ActionKey.Down:
-                field.Down(); 
-                break;
             case ActionKey.Left: 
-                field.Left(); 
-                break;
             case ActionKey.Right: 
-                field.Right(); 
+                snake.Update(key); 
                 break;
 
             case ActionKey.Exit: 

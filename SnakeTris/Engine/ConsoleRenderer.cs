@@ -28,19 +28,28 @@ public class ConsoleRenderer(Settings settings)
     public void End()
     {
         _running = false;
+        _output.Clean();
     }
     
     private void ProcessRendering()
     {
         while (_running)
         {
-            var frame = new Frame(settings.Screen);
-            _draw?.Invoke(frame);
+            try
+            {
+                var frame = new Frame(settings.Screen);
+                _draw?.Invoke(frame);
 
-            var updates = _mainFrame.Sync(frame);
-            _output.Add(updates);
+                var updates = _mainFrame.Sync(frame);
+                _output.Add(updates);
 
-            Thread.Sleep(1000/60);
+                Thread.Sleep(1000/60);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

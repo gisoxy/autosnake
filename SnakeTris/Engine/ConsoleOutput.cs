@@ -11,9 +11,16 @@ public class ConsoleOutput
     public ConsoleOutput(Settings.ScreenSettings screen)
     {
         _size = screen.Size;
-
-        Console.ResetColor();
-        Console.Clear();
+        try
+        {
+            Clean();
+            Console.SetBufferSize(screen.Size.Width, screen.Size.Height);
+            Console.SetWindowSize(screen.Size.Width, screen.Size.Height);
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
     }
 
     public void Add(Content[,] frame)
@@ -32,8 +39,17 @@ public class ConsoleOutput
                 Console.Write(item.Character);
             }
         }
+
+        Console.ResetColor();
     }
 
+    public void Clean()
+    {
+        Console.ResetColor();
+        Console.Clear();
+        Console.WriteLine("\x1b[3J");
+    }
+    
     private ConsoleColor GetColor(PixelColor color)
     {
         switch (color)
