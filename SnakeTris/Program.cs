@@ -1,5 +1,4 @@
-﻿
-using SnakeTris.Game;
+﻿using SnakeTris.Game;
 
 var game = new GameBuilder(new Balance())
     .Build();

@@ -5,121 +5,134 @@ namespace SnakeTris.Game;
 
 public class Snake
 {
-    private enum Direction
+  private enum Direction
+  {
+    Up,
+    Down,
+    Left,
+    Right
+  }
+
+  public List<Position> Segments => _segments;
+
+  private readonly List<Position> _headMoves =
+  [
+    new() { X = 0, Y = -1 },
+    new() { X = 0, Y = 1 },
+    new() { X = -1, Y = 0 },
+    new() { X = 1, Y = 0 },
+  ];
+
+  private List<Position> _segments = new();
+  private Direction _direction = Direction.Right;
+
+  public void Update()
+  {
+    MoveBody();
+    MoveHead();
+  }
+
+  public void Update(ActionKey key)
+  {
+    switch (key)
     {
-        Up,
-        Down,
-        Left,
-        Right
+      case ActionKey.Left:
+        HeadLeft();
+        break;
+      case ActionKey.Right:
+        HeadRight();
+        break;
+      case ActionKey.Up:
+        HeadUp();
+        break;
+      case ActionKey.Down:
+        HeadDown();
+        break;
+      default:
+        return;
     }
+  }
 
-    private readonly List<Position> _segments;
-    private readonly List<Position> _headMoves;
-    private Direction _direction = Direction.Right;
+  public void Draw(Frame frame)
+  {
+    var batch = frame.CreateBatch();
+    foreach (var segment in _segments)
+      batch.Pixel(segment.X, segment.Y);
+  }
 
-    public Snake()
+  public bool TryEat(Position position)
+  {
+    var next = GetNextPosition();
+    var canEat = next.X == position.X && next.Y == position.Y;
+    if (canEat)
+      _segments.Add(position);
+    
+    return canEat;
+  }
+
+  public void Reset()
+  {
+    _segments =
+    [
+      new Position { X = 3, Y = 5 },
+      new Position { X = 4, Y = 5 },
+      new Position { X = 5, Y = 5 },
+      new Position { X = 5, Y = 5 }
+    ];
+  }
+
+  private void MoveBody()
+  {
+    for (int i = 0; i < _segments.Count - 1; i++)
     {
-        _segments =
-        [
-            new Position { X = 3, Y = 5 },
-            new Position { X = 4, Y = 5 },
-            new Position { X = 5, Y = 5 },
-            new Position { X = 5, Y = 5 }
-        ];
-
-        _headMoves =
-        [
-            new Position { X = 0, Y = -1 },
-            new Position { X = 0, Y = 1 },
-            new Position { X = -1, Y = 0 },
-            new Position { X = 1, Y = 0 },
-        ];
+      _segments[i].X = _segments[i + 1].X;
+      _segments[i].Y = _segments[i + 1].Y;
     }
+  }
 
-    public void Update()
-    {
-        MoveBody();
-        MoveHead();
-    }
+  private void MoveHead()
+  {
+    var next = GetNextPosition();
+    _segments[^1].X = next.X;
+    _segments[^1].Y = next.Y;
+  }
 
-    public void Update(ActionKey key)
-    {
-        switch (key)
-        {
-            case ActionKey.Left:
-                HeadLeft();
-                break;
-            case ActionKey.Right:
-                HeadRight();
-                break;
-            case ActionKey.Up: 
-                HeadUp();
-                break;
-            case ActionKey.Down:
-                HeadDown();
-                break;
-            default:
-                return;
-        }
-    }
+  private Position GetNextPosition()
+  {
+    var offset = _headMoves[(int)_direction];
+    var headPos = _segments[^1];
+    return new Position { X = headPos.X + offset.X, Y = headPos.Y + offset.Y };
+  }
+  
+  private void HeadUp()
+  {
+    if (_direction == Direction.Down)
+      return;
 
-    public void Draw(Frame frame)
-    {
-        var batch = frame.CreateBatch();
-        foreach (var segment in _segments)
-            batch.Pixel(segment.X, segment.Y);
-    }
+    _direction = Direction.Up;
+  }
 
-    public void Reset()
-    {
-    }
+  private void HeadDown()
+  {
+    if (_direction == Direction.Up)
+      return;
 
-    private void MoveBody()
-    {
-        for (int i = 0; i < _segments.Count - 1; i++)
-        {
-            _segments[i].X = _segments[i + 1].X;
-            _segments[i].Y = _segments[i + 1].Y;
-        }
-    }
+    _direction = Direction.Down;
+  }
 
-    private void MoveHead()
-    {
-        var offset = _headMoves[(int)_direction];
-        var head = _segments.Count - 1;
-        _segments[head].X += offset.X;
-        _segments[head].Y += offset.Y;
-    }
+  private void HeadLeft()
+  {
+    if (_direction == Direction.Right)
+      return;
 
-    private void HeadUp()
-    {
-        if (_direction == Direction.Down)
-            return;
-        
-        _direction = Direction.Up;
-    }
+    _direction = Direction.Left;
+  }
 
-    private void HeadDown()
-    {
-        if (_direction == Direction.Up)
-            return;
-        
-        _direction = Direction.Down;
-    }
+  private void HeadRight()
+  {
+    if (_direction == Direction.Left)
+      return;
 
-    private void HeadLeft()
-    {
-        if (_direction == Direction.Right)
-            return;
-        
-        _direction = Direction.Left;
-    }
-
-    private void HeadRight()
-    {
-        if (_direction == Direction.Left)
-            return;
-        
-        _direction = Direction.Right;
-    }
+    _direction = Direction.Right;
+  }
 }

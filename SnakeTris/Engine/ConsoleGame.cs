@@ -1,5 +1,4 @@
 using SnakeTris.Engine.Config;
-using SnakeTris.Engine.Rendering;
 
 namespace SnakeTris.Engine;
 
