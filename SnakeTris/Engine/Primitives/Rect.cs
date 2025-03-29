@@ -20,7 +20,7 @@ public class Rect : List<Primitive>
 
                 Add(new Primitive
                 {
-                    Position = new Position { X = j, Y = i },
+                    Position = new Position(j, i),
                     Content = Content.Space
                 });
             }

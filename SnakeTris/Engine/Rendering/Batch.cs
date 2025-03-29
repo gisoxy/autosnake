@@ -11,7 +11,7 @@ public class Batch
     {
         var primitive = new Primitive
         {
-            Position = new Position { X = x, Y = y },
+            Position = new Position (x, y),
             Content = Content.Space
         };
         _items.Add(primitive);

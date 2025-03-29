@@ -1,12 +1,11 @@
 namespace SnakeTris.Engine.Entities;
 
-public class Size
+public class Size(int width, int height)
 {
-    public int Width { get; set; }
-    public int Height { get; set; }
+    public int Width { get; set; } = width;
+    public int Height { get; set; } = height;
 
-    public Size(int size)
+    public Size(int size) : this(size, size)
     {
-        Width = Height = size;
     }
 }

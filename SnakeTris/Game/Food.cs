@@ -5,7 +5,7 @@ namespace SnakeTris.Game;
 
 public class Food
 {
-    public Position Position { get; set; } = new Position();
+    public Position Position { get; set; } = new Position(0, 0);
     
     public void Draw(Frame frame)
     {

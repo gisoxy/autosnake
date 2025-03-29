@@ -14,7 +14,7 @@ public class Line : List<Primitive>
         _y = y;
         Add(new Primitive
         {
-            Position = new Position { X = x, Y = y },
+            Position = new Position(x, y),
             Content = Content.Space
         });
     }
@@ -27,7 +27,7 @@ public class Line : List<Primitive>
         for (int j = 0; j != y; j += stepY)
             Add(new Primitive
             {
-                Position = new Position { X = i, Y = j },
+                Position = new Position(j, i),
                 Content = Content.Space
             });
     }

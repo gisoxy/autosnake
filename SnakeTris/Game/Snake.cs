@@ -17,10 +17,10 @@ public class Snake
 
   private readonly List<Position> _headMoves =
   [
-    new() { X = 0, Y = -1 },
-    new() { X = 0, Y = 1 },
-    new() { X = -1, Y = 0 },
-    new() { X = 1, Y = 0 },
+    new(0, -1),
+    new(0, 1),
+    new(-1, 0),
+    new(1, 0),
   ];
 
   private List<Position> _segments = new();
@@ -74,10 +74,10 @@ public class Snake
   {
     _segments =
     [
-      new Position { X = 3, Y = 5 },
-      new Position { X = 4, Y = 5 },
-      new Position { X = 5, Y = 5 },
-      new Position { X = 5, Y = 5 }
+      new Position (3, 5),
+      new Position (4, 5),
+      new Position (5, 5),
+      new Position (5, 5)
     ];
   }
 
@@ -101,7 +101,7 @@ public class Snake
   {
     var offset = _headMoves[(int)_direction];
     var headPos = _segments[^1];
-    return new Position { X = headPos.X + offset.X, Y = headPos.Y + offset.Y };
+    return new Position (headPos.X + offset.X,  headPos.Y + offset.Y);
   }
   
   private void HeadUp()
