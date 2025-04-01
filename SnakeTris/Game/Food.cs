@@ -11,6 +11,8 @@ public class Food
     {
         var batch = frame.CreateBatch();
         batch.Pixel(Position.X, Position.Y);
+        
+        batch.Text(42, 3, $"F: {Position.X} {Position.Y}");
     }
 
     public void Move(Position position)

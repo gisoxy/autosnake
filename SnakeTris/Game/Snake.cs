@@ -58,6 +58,9 @@ public class Snake
     var batch = frame.CreateBatch();
     foreach (var segment in _segments)
       batch.Pixel(segment.X, segment.Y);
+    
+    var headPos = _segments[^1];
+    batch.Text(42, 4, $"H: {headPos.X} {headPos.Y}");
   }
 
   public bool TryEat(Position position)

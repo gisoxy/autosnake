@@ -15,7 +15,7 @@ public class FrameBuffer(Size size, Content[,] value)
                 var left = Value[i, j];
                 var right = newBuffer.Value[i, j];
                 
-                if (left.Character == right.Character && left.Color == right.Color)
+                if (left.Character == right.Character && left.Foreground == right.Foreground && left.Background == right.Background)
                     Value[i, j] = Content.Empty;
                 else
                     Value[i, j] = newBuffer.Value[i, j];

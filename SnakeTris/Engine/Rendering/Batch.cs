@@ -17,6 +17,12 @@ public class Batch
         _items.Add(primitive);
     }
 
+    public void Text(int x, int y, string value)
+    {
+        var text = new Text(x, y, value);
+        _items.AddRange(text);
+    }
+
     public void Line(int x1, int y1, int x2, int y2)
     {
         var line = new Line(x1, y1);
