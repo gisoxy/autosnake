@@ -36,6 +36,18 @@ public class Batch
         _items.AddRange(rect);
     }
 
+    public void SmoothRect(Rectangle rectangle)
+    {
+        var rect = new SmoothRect(rectangle);
+        _items.AddRange(rect);
+    }
+
+    public void FilledSmoothRect(Rectangle rectangle)
+    {
+        var rect = new FilledSmoothRect(rectangle);
+        _items.AddRange(rect);
+    }
+    
     public IEnumerator<Primitive> GetEnumerator()
     {
         return _items.GetEnumerator();

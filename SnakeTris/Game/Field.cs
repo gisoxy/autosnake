@@ -9,7 +9,7 @@ public class Field
   private readonly Rectangle _bounds = new()
   {
     Position = new(0, 0),
-    Size = new(40, 20),
+    Size = new(41, 21),
   };
 
   private readonly Rectangle _area;
@@ -22,7 +22,7 @@ public class Field
   public void Draw(Frame frame)
   {
     var batch = frame.CreateBatch();
-    batch.Rect(_bounds.Position.X, _bounds.Position.Y, _bounds.Size.Width, _bounds.Size.Height);
+    batch.FilledSmoothRect(_bounds);
   }
 
   public Position GetPosition(List<Position> skip)
