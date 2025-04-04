@@ -17,7 +17,7 @@ public static class RandomExtensions
   public static Position UniqPosition(this Random self, Rectangle bounds, List<Position> ignore)
   {
       var pos = self.Position(bounds);
-      while (ignore.Any(x => x.X == pos.X && x.Y == pos.Y))
+      while (pos.X % 2 == 0 || pos.Y % 2 == 0|| ignore.Any(x => x.X == pos.X && x.Y == pos.Y))
         pos = self.Position(bounds);
       
       return pos;

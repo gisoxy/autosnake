@@ -17,10 +17,10 @@ public class Snake
 
   private readonly List<Position> _headMoves =
   [
-    new(0, -1),
-    new(0, 1),
-    new(-1, 0),
-    new(1, 0),
+    new(0, -2),
+    new(0, 2),
+    new(-2, 0),
+    new(2, 0),
   ];
 
   private List<Position> _segments = new();
@@ -78,9 +78,9 @@ public class Snake
     _segments =
     [
       new Position (3, 5),
-      new Position (4, 5),
       new Position (5, 5),
-      new Position (5, 5)
+      new Position (7, 5),
+      new Position (9, 5)
     ];
   }
 
