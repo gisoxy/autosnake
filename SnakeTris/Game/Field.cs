@@ -9,7 +9,7 @@ public class Field
   private readonly Rectangle _bounds = new()
   {
     Position = new(0, 0),
-    Size = new(41, 21),
+    Size = new(31, 41),
   };
 
   private readonly Rectangle _area;

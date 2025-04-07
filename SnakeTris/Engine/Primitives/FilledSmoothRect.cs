@@ -57,7 +57,7 @@ public class FilledSmoothRect : SmoothRect
     bool bottom = i == rect.Position.Y + rect.Size.Height - 1;
     bool left = j == rect.Position.X;
     bool right = j == rect.Position.X + rect.Size.Width - 1;
-    bool oddX = j % 2 == 0;
+    bool oddX = j % 3 == 0;
     bool oddY = i % 2 == 0;
     if ((top && left) || (top && right) || (bottom && left) || (bottom && right))
       return null;

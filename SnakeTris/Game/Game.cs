@@ -33,9 +33,11 @@ public class Game(Field field, Snake snake, Food food)
   {
     snake.Update();
     var eaten = snake.TryEat(food.Position);
+
     if (!eaten)
       return;
 
+    snake.Update();
     var newPosition = field.GetPosition(snake.Segments);
     food.Move(newPosition);
   }

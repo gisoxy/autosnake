@@ -19,8 +19,8 @@ public class Snake
   [
     new(0, -2),
     new(0, 2),
-    new(-2, 0),
-    new(2, 0),
+    new(-3, 0),
+    new(3, 0),
   ];
 
   private List<Position> _segments = new();
@@ -65,11 +65,16 @@ public class Snake
 
   public bool TryEat(Position position)
   {
-    var next = GetNextPosition();
-    var canEat = next.X == position.X && next.Y == position.Y;
+    var head = _segments[^2];
+    var canEat = head.X == position.X && head.Y == position.Y;
     if (canEat)
-      _segments.Add(position);
-    
+    {
+      var newSegments = new List<Position>();
+      newSegments.Add(_segments[0].Clone());
+      newSegments.Add(_segments[1].Clone());
+      newSegments.AddRange(_segments);
+      _segments = newSegments;
+    }
     return canEat;
   }
 
@@ -78,33 +83,36 @@ public class Snake
     _segments =
     [
       new Position (3, 5),
-      new Position (5, 5),
+      new Position (4, 5),
       new Position (7, 5),
-      new Position (9, 5)
+      new Position (8, 5),
+      new Position (10, 5),
+      new Position (11, 5),
+      new Position (13, 5),
+      new Position (14, 5)
     ];
+    
   }
 
   private void MoveBody()
   {
-    for (int i = 0; i < _segments.Count - 1; i++)
+    for (int i = 0; i < _segments.Count - 2; i ++)
     {
-      _segments[i].X = _segments[i + 1].X;
-      _segments[i].Y = _segments[i + 1].Y;
+      _segments[i].X = _segments[i + 2].X;
+      _segments[i].Y = _segments[i + 2].Y;
     }
   }
 
   private void MoveHead()
   {
-    var next = GetNextPosition();
-    _segments[^1].X = next.X;
-    _segments[^1].Y = next.Y;
+    _segments[^1] = GetNextPosition(_segments[^1]);
+    _segments[^2] = GetNextPosition(_segments[^2]);
   }
 
-  private Position GetNextPosition()
+  private Position GetNextPosition(Position head)
   {
     var offset = _headMoves[(int)_direction];
-    var headPos = _segments[^1];
-    return new Position (headPos.X + offset.X,  headPos.Y + offset.Y);
+    return new Position (head.X + offset.X, head.Y + offset.Y);
   }
   
   private void HeadUp()
