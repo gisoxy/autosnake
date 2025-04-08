@@ -31,13 +31,14 @@ public class Game(Field field, Snake snake, Food food)
 
   private void Update()
   {
-    snake.Update();
-    var eaten = snake.TryEat(food.Position);
-
-    if (!eaten)
+    var beEaten = snake.Collides(food.Position);
+    if (!beEaten)
+    {
+      snake.Update();
       return;
+    }
 
-    snake.Update();
+    snake.Grow();
     var newPosition = field.GetPosition(snake.Segments);
     food.Move(newPosition);
   }

@@ -63,19 +63,22 @@ public class Snake
     batch.Text(42, 4, $"H: {headPos.X} {headPos.Y}");
   }
 
-  public bool TryEat(Position position)
+  public bool Collides(Position position)
   {
-    var head = _segments[^2];
-    var canEat = head.X == position.X && head.Y == position.Y;
-    if (canEat)
-    {
-      var newSegments = new List<Position>();
-      newSegments.Add(_segments[0].Clone());
-      newSegments.Add(_segments[1].Clone());
-      newSegments.AddRange(_segments);
-      _segments = newSegments;
-    }
-    return canEat;
+    var head = GetNextPosition(_segments[^2]);
+    var hasCollision = head.X == position.X && head.Y == position.Y;
+    return hasCollision;
+  }
+
+  public void Grow() 
+  {
+    var newSegments = new List<Position>();
+    newSegments.Add(_segments[0].Clone());
+    newSegments.Add(_segments[1].Clone());
+    newSegments.AddRange(_segments);
+    _segments = newSegments;
+    MoveBody();
+    MoveHead();
   }
 
   public void Reset()
