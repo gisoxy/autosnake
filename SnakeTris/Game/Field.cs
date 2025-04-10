@@ -31,7 +31,7 @@ public class Field
     return random.UniqPosition(_area, skip);
   }
 
-  public Rectangle GetBounds() 
+  public Rectangle GetBounds()
   {
     return _bounds;
   }

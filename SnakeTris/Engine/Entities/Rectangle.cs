@@ -14,13 +14,13 @@ public class Rectangle
     };
   }
 
-  public void Normalize(Position position) 
+  public void Normalize(Position position)
   {
     if (position.X >= Position.X + Size.Width)
       position.X -= Size.Width - 1;
 
     if (position.X <= Position.X)
-      position.X += Size.Width - 1; 
+      position.X += Size.Width - 1;
 
     if (position.Y >= Position.Y + Size.Height)
       position.Y -= Size.Height - 1;

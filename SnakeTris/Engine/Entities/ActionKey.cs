@@ -2,9 +2,9 @@ namespace SnakeTris.Engine.Entities;
 
 public enum ActionKey
 {
-    Up,
-    Down,
-    Left,
-    Right,
-    Exit
+  Up,
+  Down,
+  Left,
+  Right,
+  Exit
 }

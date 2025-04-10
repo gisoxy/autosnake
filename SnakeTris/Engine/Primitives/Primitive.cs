@@ -5,6 +5,6 @@ namespace SnakeTris.Engine.Primitives;
 
 public class Primitive
 {
-    public Position Position { get; set; }
-    public Content Content { get; set; }
+  public Position Position { get; set; }
+  public Content Content { get; set; }
 }

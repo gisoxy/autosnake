@@ -1,7 +1,7 @@
 ﻿using SnakeTris.Game;
 
 var game = new GameBuilder(new Balance())
-    .Build();
+  .Build();
 
 game.Play();
 game.Wait();

@@ -49,7 +49,7 @@ public class ConsoleOutput
     Console.ResetColor();
     Console.Clear();
     Console.WriteLine("\x1b[3J");
-    
+
     Console.BackgroundColor = ConsoleColor.Black;
     Console.ForegroundColor = ConsoleColor.Black;
 

@@ -16,7 +16,7 @@ public class Game(Field field, Snake snake, Food food)
     Subscribe();
     Start();
   }
-  
+
   private void Subscribe()
   {
     ConsoleInput.Click(Action);
@@ -33,7 +33,7 @@ public class Game(Field field, Snake snake, Food food)
 
   private void Update()
   {
-    if (_skipNextMove) 
+    if (_skipNextMove)
     {
       _skipNextMove = false;
       return;
@@ -49,7 +49,7 @@ public class Game(Field field, Snake snake, Food food)
     }
 
     snake.Update();
-    if (snake.Dead()) 
+    if (snake.Dead())
       Reset();
   }
 
@@ -69,7 +69,7 @@ public class Game(Field field, Snake snake, Food food)
       case ActionKey.Left:
       case ActionKey.Right:
         var changed = snake.Update(key);
-        if (changed) 
+        if (changed)
           ForceUpdate();
         break;
 

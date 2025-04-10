@@ -4,6 +4,6 @@ namespace SnakeTris.Game;
 
 public class Balance
 {
-    public Size Field { get; set; }
-    public Position Start { get; set; }
+  public Size Field { get; set; }
+  public Position Start { get; set; }
 }

@@ -1,5 +1,5 @@
 namespace SnakeTris.Engine.Primitives;
 
-public class Ellipse : List<Primitive> 
+public class Ellipse : List<Primitive>
 {
 }

@@ -3,11 +3,11 @@ using SnakeTris.Engine.Rendering;
 
 namespace SnakeTris.Engine.Primitives;
 
-public class Text : List<Primitive> 
+public class Text : List<Primitive>
 {
   public Text(int x, int y, string text)
   {
-    for (int i = 0; i <  text.Length; i++)
+    for (int i = 0; i < text.Length; i++)
     {
       Add(new Primitive
       {
