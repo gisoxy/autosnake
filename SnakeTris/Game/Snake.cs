@@ -23,8 +23,19 @@ public class Snake
     new(3, 0),
   ];
 
+  private readonly Dictionary<Direction, Direction> _opposite = new()
+  {
+    [Direction.Left] = Direction.Right,
+    [Direction.Right] = Direction.Left,
+    [Direction.Up] = Direction.Down,
+    [Direction.Down] = Direction.Up,
+  };
+
   private List<Position> _segments = new();
   private Direction _direction = Direction.Right;
+
+  private Rectangle _fieldBounds;
+  private bool _forsedMove;
 
   public void Update()
   {
@@ -32,25 +43,16 @@ public class Snake
     MoveHead();
   }
 
-  public void Update(ActionKey key)
+  public bool Update(ActionKey key)
   {
-    switch (key)
-    {
-      case ActionKey.Left:
-        HeadLeft();
-        break;
-      case ActionKey.Right:
-        HeadRight();
-        break;
-      case ActionKey.Up:
-        HeadUp();
-        break;
-      case ActionKey.Down:
-        HeadDown();
-        break;
-      default:
-        return;
-    }
+    var newDirection = GetDirection(key);
+    var sameDirection = _direction == newDirection;
+    var oppositeDirection = newDirection == _opposite[_direction];
+    if (sameDirection || oppositeDirection)
+      return false;
+
+    _direction = newDirection;
+    return true;
   }
 
   public void Draw(Frame frame)
@@ -81,12 +83,25 @@ public class Snake
     MoveHead();
   }
 
+  public bool Dead() 
+  {
+    for (int i = 0; i < _segments.Count - 2; i ++)
+    {
+      var cannibalism = _segments[i].X == _segments[^1].X 
+        && _segments[i].Y == _segments[^2].Y;
+      if (cannibalism)
+        return true;
+    }
+    return false;
+  }
+
   public void Reset()
   {
+    _direction = Direction.Right;
     _segments =
     [
-      new Position (3, 5),
       new Position (4, 5),
+      new Position (5, 5),
       new Position (7, 5),
       new Position (8, 5),
       new Position (10, 5),
@@ -94,7 +109,11 @@ public class Snake
       new Position (13, 5),
       new Position (14, 5)
     ];
-    
+  }
+
+  public void SetBounds(Rectangle fieldBounds)
+  {
+    _fieldBounds = fieldBounds;
   }
 
   private void MoveBody()
@@ -115,38 +134,21 @@ public class Snake
   private Position GetNextPosition(Position head)
   {
     var offset = _headMoves[(int)_direction];
-    return new Position (head.X + offset.X, head.Y + offset.Y);
+    var next = new Position (head.X + offset.X, head.Y + offset.Y);
+    _fieldBounds.Normalize(next);
+    return next;
   }
   
-  private void HeadUp()
+  private Direction GetDirection(ActionKey key)
   {
-    if (_direction == Direction.Down)
-      return;
-
-    _direction = Direction.Up;
-  }
-
-  private void HeadDown()
-  {
-    if (_direction == Direction.Up)
-      return;
-
-    _direction = Direction.Down;
-  }
-
-  private void HeadLeft()
-  {
-    if (_direction == Direction.Right)
-      return;
-
-    _direction = Direction.Left;
-  }
-
-  private void HeadRight()
-  {
-    if (_direction == Direction.Left)
-      return;
-
-    _direction = Direction.Right;
+    switch (key)
+    {
+      case ActionKey.Left: return Direction.Left;
+      case ActionKey.Right: return Direction.Right;
+      case ActionKey.Up: return Direction.Up;
+      case ActionKey.Down: return Direction.Down;
+      default:
+        return _direction;
+    }
   }
 }

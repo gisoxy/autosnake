@@ -8,6 +8,8 @@ namespace SnakeTris.Game;
 public class Game(Field field, Snake snake, Food food)
   : ConsoleGame(new Settings())
 {
+  private bool _skipNextMove;
+
   public void Play()
   {
     Reset();
@@ -31,16 +33,31 @@ public class Game(Field field, Snake snake, Food food)
 
   private void Update()
   {
-    var beEaten = snake.Collides(food.Position);
-    if (!beEaten)
+    if (_skipNextMove) 
     {
-      snake.Update();
+      _skipNextMove = false;
       return;
     }
 
-    snake.Grow();
-    var newPosition = field.GetPosition(snake.Segments);
-    food.Move(newPosition);
+    var beEaten = snake.Collides(food.Position);
+    if (beEaten)
+    {
+      snake.Grow();
+      var newPosition = field.GetPosition(snake.Segments);
+      food.Move(newPosition);
+      return;
+    }
+
+    snake.Update();
+    if (snake.Dead()) 
+      Reset();
+  }
+
+  private void ForceUpdate()
+  {
+    _skipNextMove = false;
+    Update();
+    _skipNextMove = true;
   }
 
   private void Action(ActionKey key)
@@ -51,7 +68,9 @@ public class Game(Field field, Snake snake, Food food)
       case ActionKey.Down:
       case ActionKey.Left:
       case ActionKey.Right:
-        snake.Update(key);
+        var changed = snake.Update(key);
+        if (changed) 
+          ForceUpdate();
         break;
 
       case ActionKey.Exit:
@@ -65,6 +84,7 @@ public class Game(Field field, Snake snake, Food food)
   private void Reset()
   {
     snake.Reset();
+    snake.SetBounds(field.GetBounds());
     var position = field.GetPosition(snake.Segments);
     food.Move(position);
   }

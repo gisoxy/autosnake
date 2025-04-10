@@ -41,6 +41,7 @@ public class ConsoleOutput
     }
 
     Console.ResetColor();
+    Console.SetCursorPosition(_size.Width - 1, _size.Height - 1);
   }
 
   public void Clean()
@@ -48,6 +49,18 @@ public class ConsoleOutput
     Console.ResetColor();
     Console.Clear();
     Console.WriteLine("\x1b[3J");
+    
+    Console.BackgroundColor = ConsoleColor.Black;
+    Console.ForegroundColor = ConsoleColor.Black;
+
+    for (int i = 0; i < _size.Height; i++)
+    {
+      for (int j = 0; j < _size.Width; j++)
+      {
+        Console.SetCursorPosition(j, i);
+        Console.Write(' ');
+      }
+    }
   }
 
   private ConsoleColor GetColor(PixelColor color)

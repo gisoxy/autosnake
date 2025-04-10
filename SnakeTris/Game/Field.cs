@@ -30,4 +30,9 @@ public class Field
     var random = new Random();
     return random.UniqPosition(_area, skip);
   }
+
+  public Rectangle GetBounds() 
+  {
+    return _bounds;
+  }
 }
