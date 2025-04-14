@@ -31,11 +31,20 @@ public class Snake
     [Direction.Down] = Direction.Up,
   };
 
+  private readonly Position _start;
+  private readonly int _size;
+
   private List<Position> _segments = new();
   private Direction _direction = Direction.Right;
 
   private Rectangle _fieldBounds;
   private bool _forsedMove;
+
+  public Snake(Position start, int size) 
+  {
+    _start = start;
+    _size = size;
+  }
 
   public void Update()
   {
@@ -99,17 +108,12 @@ public class Snake
   public void Reset()
   {
     _direction = Direction.Right;
-    _segments =
-    [
-      new Position(4, 5),
-      new Position(5, 5),
-      new Position(7, 5),
-      new Position(8, 5),
-      new Position(10, 5),
-      new Position(11, 5),
-      new Position(13, 5),
-      new Position(14, 5)
-    ];
+    _segments = Enumerable
+      .Range(_start.X, _start.X + _size * 3)
+      .Where(x => x % 3 != 0)
+      .Select(x => new Position(x, _start.Y))
+      .Take(_size * 2)
+      .ToList(); 
   }
 
   public void SetBounds(Rectangle fieldBounds)

@@ -14,9 +14,10 @@ public class Field
 
   private readonly Rectangle _area;
 
-  public Field()
+  public Field(Rectangle bounds)
   {
-    _area = _bounds.Shrink(1);
+    _bounds = bounds;
+    _area = bounds.Shrink(1);
   }
 
   public void Draw(Frame frame)

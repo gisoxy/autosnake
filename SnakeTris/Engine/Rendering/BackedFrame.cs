@@ -1,5 +1,3 @@
-using SnakeTris.Engine.Entities;
-
 namespace SnakeTris.Engine.Rendering;
 
 public class BackedFrame(Frame frame)

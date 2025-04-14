@@ -6,8 +6,8 @@ public class GameBuilder(Balance balance)
 
   public Game Build()
   {
-    var field = new Field();
-    var snake = new Snake();
+    var field = new Field(_balance.Field());
+    var snake = new Snake(_balance.Start(), _balance.StartSize);
     var food = new Food();
 
     var game = new Game(field, snake, food);
