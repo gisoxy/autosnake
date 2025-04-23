@@ -5,19 +5,26 @@ namespace SnakeTris.Game;
 
 public class Food
 {
-  public Position Position { get; set; } = new Position(0, 0);
+  public Position Position => _current!.Position;
 
+  private readonly FoodBuilder _builder = new();
+  private FoodKind? _current;
+  
   public void Draw(Frame frame)
   {
-    var batch = frame.CreateBatch();
-    batch.Pixel(Position.X, Position.Y);
-    batch.Pixel(Position.X + 1, Position.Y);
+    if (_current == null)
+      return;
 
-    batch.Text(42, 3, $"F: {Position.X} {Position.Y}");
+    var batch = frame.CreateBatch();
+    var position = _current.Position;
+    batch.Pixel(position.X, position.Y);
+    batch.Pixel(position.X + 1, position.Y);
+    batch.Text(42, 3, $"F: {position.X} {position.Y}");
   }
 
   public void Move(Position position)
   {
-    Position = position;
+    _current = _builder.RandomFood();
+    _current.Position = position;
   }
 }
