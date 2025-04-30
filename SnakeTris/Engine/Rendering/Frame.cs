@@ -13,7 +13,7 @@ public class Frame(Settings.ScreenSettings screen)
 
   public Batch CreateBatch()
   {
-    var batch = new Batch();
+    var batch = new Batch(screen.LocalCoordsTranslationMap, screen.LocalWidthMultiply);
     _batches.Add(batch);
     return batch;
   }

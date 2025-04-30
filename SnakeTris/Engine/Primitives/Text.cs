@@ -5,7 +5,7 @@ namespace SnakeTris.Engine.Primitives;
 
 public class Text : List<Primitive>
 {
-  public Text(int x, int y, string text)
+  public Text(int x, int y, string text, PixelColor color)
   {
     for (int i = 0; i < text.Length; i++)
     {
@@ -15,7 +15,7 @@ public class Text : List<Primitive>
         Content = new Content
         {
           Character = text[i],
-          Foreground = PixelColor.Orange,
+          Foreground = color,
           Background = PixelColor.Black,
         }
       });

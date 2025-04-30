@@ -6,20 +6,52 @@ namespace SnakeTris.Engine.Rendering;
 public class Batch
 {
   private readonly List<Primitive> _items = new();
+  private readonly Position _translationMap;
+  private readonly int _widthMultiply;
 
-  public void Pixel(int x, int y)
+  public Batch(Position translationMap, int widthMultiply)
   {
-    var primitive = new Primitive
-    {
-      Position = new Position(x, y),
-      Content = Content.Space
-    };
-    _items.Add(primitive);
+    _translationMap = translationMap;
+    _widthMultiply = widthMultiply;
   }
 
-  public void Text(int x, int y, string value)
+  public void Pixel(int x, int y, PixelColor color, bool local = false)
   {
-    var text = new Text(x, y, value);
+    var position = new Position(x, y);
+    if (!local)
+    {
+      var primitive = new Primitive
+      {
+        Position = position,
+
+        Content = Content.Space(color)
+      };
+
+      _items.Add(primitive);
+      return;
+    }
+
+    position.X *= _translationMap.X;
+    position.Y *= _translationMap.Y;
+
+    position.Y += 1;
+    position.X += 1;
+
+    for (var i = 0; i < _widthMultiply; i++)
+    {
+      var primitive = new Primitive
+      {
+        Position = new Position(position.X + i, position.Y),
+        Content = Content.Space(color)
+      };
+
+      _items.Add(primitive);
+    }
+  }
+
+  public void Text(int x, int y, string value, PixelColor color = PixelColor.White)
+  {
+    var text = new Text(x, y, value, color);
     _items.AddRange(text);
   }
 
@@ -42,9 +74,9 @@ public class Batch
     _items.AddRange(rect);
   }
 
-  public void FilledSmoothRect(Rectangle rectangle)
+  public void FilledSmoothRect(Rectangle rectangle, bool local)
   {
-    var rect = new FilledSmoothRect(rectangle);
+    var rect = new FilledSmoothRect(rectangle.Scale(_translationMap));
     _items.AddRange(rect);
   }
 

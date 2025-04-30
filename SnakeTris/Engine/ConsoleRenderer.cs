@@ -8,9 +8,17 @@ public class ConsoleRenderer(Settings settings)
   private bool _running;
   private Action<Frame>? _draw;
   private Thread? _rendererThread;
+  private Action? _beforeRender;
+  private Action? _afterRender;
 
   private readonly Frame _mainFrame = new(settings.Screen);
   private readonly ConsoleOutput _output = new(settings.Screen);
+
+  public void Init(Action beforeRender, Action afterRender)
+  {
+    _beforeRender = beforeRender;
+    _afterRender = afterRender;
+  }
 
   public void Draw(Action<Frame> draw)
   {
@@ -37,11 +45,15 @@ public class ConsoleRenderer(Settings settings)
     {
       try
       {
+        _beforeRender?.Invoke();
+
         var frame = new Frame(settings.Screen);
         _draw?.Invoke(frame);
 
         var updates = _mainFrame.Sync(frame);
         _output.Add(updates);
+
+        _afterRender?.Invoke();
 
         Thread.Sleep(1000 / 60);
       }

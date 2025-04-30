@@ -21,7 +21,7 @@ public class Rect : List<Primitive>
         Add(new Primitive
         {
           Position = new Position(j, i),
-          Content = Content.Space
+          Content = Content.Space(PixelColor.Green)
         });
       }
     }

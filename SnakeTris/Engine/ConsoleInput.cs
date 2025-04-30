@@ -5,6 +5,7 @@ namespace SnakeTris.Engine;
 public class ConsoleInput
 {
   private bool _running;
+  private bool _pause;
 
   private Action? _timerAction;
   private Action<ActionKey>? _keyPressAction;
@@ -12,7 +13,7 @@ public class ConsoleInput
   private Thread? _timerThread;
   private Thread? _inputThread;
 
-  private int _speed = 1500;
+  private int _speed = 500;
 
   public void Begin()
   {
@@ -55,23 +56,39 @@ public class ConsoleInput
 
   private void ProcessTimer()
   {
-    while (_running)
+    try
     {
-      _timerAction?.Invoke();
-      Thread.Sleep(_speed);
+      while (_running)
+      {
+        if (!_pause)
+          _timerAction?.Invoke();
+
+        Thread.Sleep(_speed);
+      }
+    }
+    catch (Exception ex)
+    {
+      Logger.Error(ex.Message + " " + ex.StackTrace);
     }
   }
 
   private void ProcessInput()
   {
-    while (_running)
+    try
     {
-      var keyInfo = Console.ReadKey(true);
-      var key = Map(keyInfo);
-      if (key == null)
-        continue;
+      while (_running)
+      {
+        var keyInfo = Console.ReadKey(true);
+        var key = Map(keyInfo);
+        if (key == null)
+          continue;
 
-      _keyPressAction?.Invoke(key.Value);
+        _keyPressAction?.Invoke(key.Value);
+      }
+    }
+    catch (Exception ex)
+    {
+      Logger.Error(ex.Message + " " + ex.StackTrace);
     }
   }
 
@@ -89,5 +106,15 @@ public class ConsoleInput
 
       default: return null;
     }
+  }
+
+  public void PauseUpdates()
+  {
+    _pause = true;
+  }
+
+  public void ResumeUpdates()
+  {
+    _pause = false;
   }
 }

@@ -34,9 +34,9 @@ public class FilledSmoothRect : SmoothRect
 
   private void FillCenter(Rectangle rect)
   {
-    for (int i = rect.Position.Y; i < rect.Size.Height; i++)
+    for (int i = rect.Position.Y; i < rect.Position.Y + rect.Size.Height; i++)
     {
-      for (int j = rect.Position.X; j < rect.Size.Width; j++)
+      for (int j = rect.Position.X; j < rect.Position.X + rect.Size.Width; j++)
       {
         var content = Resolve(rect, i, j);
         if (content == null)

@@ -9,6 +9,10 @@ public class Game(Field field, Snake snake, Food food)
   : ConsoleGame(new Settings())
 {
   private bool _skipNextMove;
+  private PositionFinder _finder = new(field, snake, food);
+  private readonly Rectangle _fieldBounds = field.GetBounds();
+
+  private readonly LogPanel _logPanel = new();
 
   public void Play()
   {
@@ -26,6 +30,8 @@ public class Game(Field field, Snake snake, Food food)
 
   private void Call(Frame frame)
   {
+    _logPanel.Draw(frame);
+
     field.Draw(frame);
     snake.Draw(frame);
     food.Draw(frame);
@@ -39,18 +45,51 @@ public class Game(Field field, Snake snake, Food food)
       return;
     }
 
-    var beEaten = snake.Collides(food.Position);
-    if (beEaten)
+    var collides = snake.Collides(food.GetSegments());
+    if (!collides)
     {
-      snake.Grow();
-      var newPosition = field.GetPosition(snake.Segments);
-      food.Move(newPosition);
+      snake.Update();
+      if (snake.Dead())
+        Reset();
+
       return;
     }
 
-    snake.Update();
-    if (snake.Dead())
+    if (food.Eatable)
+    {
+      snake.Grow();
+      var newPosition = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+      food.Relocate(newPosition);
+      return;
+    }
+
+    if (!food.Eatable)
+    {
+      snake.Update();
+      food.Move(snake.MovingVector());
+      var nextPositionStatus = _finder.AnalisePosition(_fieldBounds, food.GetSegments());
+      Logger.Info($"St: {nextPositionStatus}");
+
+      if (nextPositionStatus == PositionStatus.Free)
+        return;
+
+      ApplyChanges(nextPositionStatus);
+    }
+  }
+
+  private void ApplyChanges(PositionStatus status)
+  {
+    if (status == PositionStatus.UsedByField || status == PositionStatus.Bottom)
+    {
+      field.AttachBlock(food.GetSegments());
+      var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+      food.Relocate(position);
+    }
+
+    if (status == PositionStatus.UserBySnake)
+    {
       Reset();
+    }
   }
 
   private void ForceUpdate()
@@ -84,8 +123,11 @@ public class Game(Field field, Snake snake, Food food)
   private void Reset()
   {
     snake.Reset();
-    snake.SetBounds(field.GetBounds());
-    var position = field.GetPosition(snake.Segments);
-    food.Move(position);
+
+    snake.SetBounds(_fieldBounds);
+    food.SetBounds(_fieldBounds);
+
+    var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+    food.Relocate(position);
   }
 }

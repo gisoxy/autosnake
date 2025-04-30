@@ -8,17 +8,15 @@ public class Balance
   public int FieldY = 0;
   public int FieldWidth = 10;
   public int FieldHeight = 20;
-  public int RectSizeX = 3;
-  public int RectSizeY = 2;
 
-  public int StartPositionX = 4;
-  public int StartPositionY = 5;
+  public int StartPositionX = 0;
+  public int StartPositionY = 0;
   public int StartSize = 4;
 
   public Rectangle Field() => new Rectangle
   {
     Position = new(FieldX, FieldY),
-    Size = new(FieldWidth * RectSizeX + 1, FieldHeight * RectSizeY + 1)
+    Size = new(FieldWidth, FieldHeight)
   };
 
   public Position Start() => new Position(StartPositionX, StartPositionY);

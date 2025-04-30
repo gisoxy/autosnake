@@ -10,6 +10,7 @@ public abstract class ConsoleGame(Settings settings)
   public void Start()
   {
     ConsoleInput.Begin();
+    ConsoleRenderer.Init(BeforeRender, AfterRender);
     ConsoleRenderer.Begin();
   }
 
@@ -22,5 +23,15 @@ public abstract class ConsoleGame(Settings settings)
   public void Wait()
   {
     ConsoleInput.WhenEnd();
+  }
+
+  private void BeforeRender()
+  {
+    ConsoleInput.PauseUpdates();
+  }
+
+  private void AfterRender()
+  {
+    ConsoleInput.ResumeUpdates();
   }
 }

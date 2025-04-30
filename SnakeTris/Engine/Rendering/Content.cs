@@ -11,19 +11,22 @@ public class Content
     Background = PixelColor.Black,
   };
 
-  public static Content Space { get; } = new()
-  {
-    Character = ' ',
-    Foreground = PixelColor.Green,
-    Background = PixelColor.Green,
-  };
-
   public static Content Empty { get; } = new()
   {
     Character = 'e',
     Foreground = PixelColor.Red,
     Background = PixelColor.Red
   };
+
+  public static Content Space(PixelColor color)
+  {
+    return new()
+    {
+      Character = ' ',
+      Foreground = color,
+      Background = color
+    };
+  }
 
   public PixelColor Foreground { get; set; }
   public PixelColor Background { get; set; }

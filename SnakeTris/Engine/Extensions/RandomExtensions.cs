@@ -13,12 +13,33 @@ public static class RandomExtensions
     return pos;
   }
 
+  public static Position Position(this Random self, Rectangle bounds, Size size)
+  {
+    var pos = new Position(
+      x: self.Next(bounds.Position.X, bounds.Size.Width - size.Width),
+      y: self.Next(bounds.Position.Y, bounds.Size.Height - size.Height)
+    );
+    return pos;
+  }
+
   public static Position UniqPosition(this Random self, Rectangle bounds, List<Position> ignore)
   {
     var pos = self.Position(bounds);
-    while (((pos.X - 1) % 3 != 0) || pos.Y % 2 == 0 || ignore.Any(x => x.X == pos.X && x.Y == pos.Y))
+    while (ignore.Any(x => x == pos))
       pos = self.Position(bounds);
 
     return pos;
+  }
+}
+
+public static class PositionExtensions
+{
+  public static bool Intersect(this IEnumerable<Position> self, IEnumerable<Position> other)
+  {
+    foreach (var item in self)
+      if (other.Any(x => item == x))
+        return true;
+
+    return false;
   }
 }

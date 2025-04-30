@@ -15,7 +15,7 @@ public class Line : List<Primitive>
     Add(new Primitive
     {
       Position = new Position(x, y),
-      Content = Content.Space
+      Content = Content.Space(PixelColor.Green)
     });
   }
 
@@ -24,11 +24,11 @@ public class Line : List<Primitive>
     var stepX = Math.Sign(x - _x);
     var stepY = Math.Sign(y - _y);
     for (int i = 0; i != x; i += stepX)
-    for (int j = 0; j != y; j += stepY)
-      Add(new Primitive
-      {
-        Position = new Position(j, i),
-        Content = Content.Space
-      });
+      for (int j = 0; j != y; j += stepY)
+        Add(new Primitive
+        {
+          Position = new Position(j, i),
+          Content = Content.Space(PixelColor.Green)
+        });
   }
 }

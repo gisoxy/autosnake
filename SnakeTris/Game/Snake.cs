@@ -3,24 +3,18 @@ using SnakeTris.Engine.Rendering;
 
 namespace SnakeTris.Game;
 
-public class Snake
+public class Snake : ISegmentContainer
 {
-  private enum Direction
-  {
-    Up,
-    Down,
-    Left,
-    Right
-  }
+  public Direction MovingDirection => _direction;
 
-  public List<Position> Segments => _segments;
+  public SegmentType Type => SegmentType.SnakeSegments;
 
   private readonly List<Position> _headMoves =
   [
-    new(0, -2),
-    new(0, 2),
-    new(-3, 0),
-    new(3, 0),
+    new(0, -1),
+    new(0, 1),
+    new(-1, 0),
+    new(1, 0),
   ];
 
   private readonly Dictionary<Direction, Direction> _opposite = new()
@@ -40,7 +34,7 @@ public class Snake
   private Rectangle _fieldBounds;
   private bool _forsedMove;
 
-  public Snake(Position start, int size) 
+  public Snake(Position start, int size)
   {
     _start = start;
     _size = size;
@@ -68,16 +62,13 @@ public class Snake
   {
     var batch = frame.CreateBatch();
     foreach (var segment in _segments)
-      batch.Pixel(segment.X, segment.Y);
-
-    var headPos = _segments[^1];
-    batch.Text(42, 4, $"H: {headPos.X} {headPos.Y}");
+      batch.Pixel(segment.X, segment.Y, PixelColor.Green, local: true);
   }
 
-  public bool Collides(Position position)
+  public bool Collides(IEnumerable<Position> positions)
   {
-    var head = GetNextPosition(_segments[^2]);
-    var hasCollision = head.X == position.X && head.Y == position.Y;
+    var head = GetNextPosition(_segments[^1]);
+    var hasCollision = positions.Any(x => x.X == head.X && x.Y == head.Y);
     return hasCollision;
   }
 
@@ -85,7 +76,6 @@ public class Snake
   {
     var newSegments = new List<Position>();
     newSegments.Add(_segments[0].Clone());
-    newSegments.Add(_segments[1].Clone());
     newSegments.AddRange(_segments);
     _segments = newSegments;
     MoveBody();
@@ -97,7 +87,7 @@ public class Snake
     for (int i = 0; i < _segments.Count - 2; i++)
     {
       var cannibalism = _segments[i].X == _segments[^1].X
-                        && _segments[i].Y == _segments[^2].Y;
+        && _segments[i].Y == _segments[^1].Y;
       if (cannibalism)
         return true;
     }
@@ -109,11 +99,10 @@ public class Snake
   {
     _direction = Direction.Right;
     _segments = Enumerable
-      .Range(_start.X, _start.X + _size * 3)
-      .Where(x => x % 3 != 0)
+      .Range(_start.X, _start.X + _size)
       .Select(x => new Position(x, _start.Y))
-      .Take(_size * 2)
-      .ToList(); 
+      .Take(_size)
+      .ToList();
   }
 
   public void SetBounds(Rectangle fieldBounds)
@@ -121,19 +110,34 @@ public class Snake
     _fieldBounds = fieldBounds;
   }
 
+  public Position MovingVector()
+  {
+    var offset = _headMoves[(int)_direction];
+    return offset;
+  }
+
+  public bool IsSegmentUsed(Position position)
+  {
+    return _segments.Any(x => position.X == x.X && position.Y == x.Y);
+  }
+
+  public IEnumerable<Position> GetSegments()
+  {
+    return _segments;
+  }
+
   private void MoveBody()
   {
-    for (int i = 0; i < _segments.Count - 2; i++)
+    for (int i = 0; i < _segments.Count - 1; i++)
     {
-      _segments[i].X = _segments[i + 2].X;
-      _segments[i].Y = _segments[i + 2].Y;
+      _segments[i].X = _segments[i + 1].X;
+      _segments[i].Y = _segments[i + 1].Y;
     }
   }
 
   private void MoveHead()
   {
     _segments[^1] = GetNextPosition(_segments[^1]);
-    _segments[^2] = GetNextPosition(_segments[^2]);
   }
 
   private Position GetNextPosition(Position head)
