@@ -37,7 +37,7 @@ public static class PositionExtensions
   public static bool Intersect(this IEnumerable<Position> self, IEnumerable<Position> other)
   {
     foreach (var item in self)
-      if (other.Any(x => item == x))
+      if (other.Any(x => x == item))
         return true;
 
     return false;

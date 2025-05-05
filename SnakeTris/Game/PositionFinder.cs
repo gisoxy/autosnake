@@ -29,17 +29,19 @@ public class PositionFinder
     return position;
   }
 
-  public PositionStatus AnalisePosition(Rectangle space, IEnumerable<Position> positions)
+  public PositionStatus AnalisePosition(Rectangle space, IEnumerable<Position> positions, Position vector)
   {
     if (space.AtBottom(positions))
       return PositionStatus.Bottom;
 
+    var nextPositions = positions.Select(x => x.Add(vector)).ToList();
     var fieldContainer = _containers.First(x => x.Type == SegmentType.FieldSegments);
-    if (positions.Intersect(fieldContainer.GetSegments()))
+
+    if (nextPositions.Intersect(fieldContainer.GetSegments()))
       return PositionStatus.UsedByField;
 
     var snakeContainer = _containers.First(x => x.Type == SegmentType.SnakeSegments);
-    if (positions.Intersect(snakeContainer.GetSegments()))
+    if (nextPositions.Intersect(snakeContainer.GetSegments()))
       return PositionStatus.UserBySnake;
 
     return PositionStatus.Free;

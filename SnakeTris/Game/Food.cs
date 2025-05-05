@@ -34,7 +34,6 @@ public class Food : ISegmentContainer
   {
     Current!.Move(offsets);
     Current!.Segments.ForEach(_fieldBounds.Normalize);
-    Logger.Warn("Move " + Current.Segments.MaxBy(x => x.X).X);
   }
 
   public void Relocate(Position newPosition)

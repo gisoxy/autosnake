@@ -66,14 +66,19 @@ public class Game(Field field, Snake snake, Food food)
     if (!food.Eatable)
     {
       snake.Update();
-      food.Move(snake.MovingVector());
-      var nextPositionStatus = _finder.AnalisePosition(_fieldBounds, food.GetSegments());
-      Logger.Info($"St: {nextPositionStatus}");
-
-      if (nextPositionStatus == PositionStatus.Free)
+      var vector = snake.MovingVector();
+      var nextPositionStatus = _finder.AnalisePosition(_fieldBounds, food.GetSegments(), vector);
+      if (nextPositionStatus == PositionStatus.UsedByField)
         return;
 
-      ApplyChanges(nextPositionStatus);
+      food.Move(vector);
+      var downPositionStatus = _finder.AnalisePosition(_fieldBounds, food.GetSegments(), Position.Down);
+      Logger.Warn(downPositionStatus.ToString());
+
+      if (downPositionStatus == PositionStatus.Free)
+        return;
+
+      ApplyChanges(downPositionStatus);
     }
   }
 
