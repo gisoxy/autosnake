@@ -10,7 +10,7 @@ public class Field : ISegmentContainer
   private readonly Rectangle _bounds;
   private readonly Rectangle _area;
 
-  private readonly List<Position> _blocks = new();
+  private List<Position> _blocks = new();
 
   public Field(Rectangle bounds)
   {
@@ -30,6 +30,7 @@ public class Field : ISegmentContainer
   public void AttachBlock(IEnumerable<Position> block)
   {
     _blocks.AddRange(block);
+    RemoveLines();
   }
 
   public Rectangle GetBounds()
@@ -45,5 +46,28 @@ public class Field : ISegmentContainer
   public bool IsSegmentUsed(Position position)
   {
     return _blocks.Any(x => x == position);
+  }
+
+  private void RemoveLines(int blocksPerLine = 10)
+  {
+    var countByLine = _blocks
+      .GroupBy(x => x.Y)
+      .ToDictionary(x => x.Key, x => x.Count());
+
+    var linesToRemove = countByLine
+      .Where(x => x.Value == blocksPerLine)
+      .Select(x => x.Key)
+      .OrderByDescending(x => x)
+      .ToList();
+
+    foreach (var line in linesToRemove)
+    {
+      _blocks = _blocks.Where(x => x.Y != line).ToList();
+      _blocks.ForEach(x =>
+      {
+        if (x.Y < line)
+          x.Y++;
+      });
+    }
   }
 }
