@@ -73,8 +73,6 @@ public class Game(Field field, Snake snake, Food food)
 
       food.Move(vector);
       var downPositionStatus = _finder.AnalisePosition(_fieldBounds, food.GetSegments(), Position.Down);
-      Logger.Warn(downPositionStatus.ToString());
-
       if (downPositionStatus == PositionStatus.Free)
         return;
 
@@ -87,7 +85,8 @@ public class Game(Field field, Snake snake, Food food)
     if (status == PositionStatus.UsedByField || status == PositionStatus.Bottom)
     {
       field.AttachBlock(food.GetSegments());
-      var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+      // var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+      var position = new Position(_fieldBounds.Size.Width / 2 - food.Next.Size.Width / 2 - 1, 0);
       food.Relocate(position);
     }
 
@@ -132,7 +131,8 @@ public class Game(Field field, Snake snake, Food food)
     snake.SetBounds(_fieldBounds);
     food.SetBounds(_fieldBounds);
 
-    var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+    // var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
+    var position = new Position(_fieldBounds.Size.Width / 2 - food.Next.Size.Width / 2 - 1, 0);
     food.Relocate(position);
   }
 }
