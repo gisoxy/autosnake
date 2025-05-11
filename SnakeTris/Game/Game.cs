@@ -48,6 +48,10 @@ public class Game(Field field, Snake snake, Food food)
     var collides = snake.Collides(food.GetSegments());
     if (!collides)
     {
+      var linesRemoved = field.AttachSnake(snake.GetSegments());
+      if (linesRemoved > 0)
+        snake.Delete(linesRemoved);
+
       snake.Update();
       if (snake.Dead())
         Reset();
@@ -84,7 +88,8 @@ public class Game(Field field, Snake snake, Food food)
   {
     if (status == PositionStatus.UsedByField || status == PositionStatus.Bottom)
     {
-      field.AttachBlock(food.GetSegments());
+      var completedLines = field.AttachBlock(food.GetSegments());
+      snake.Grow(completedLines);
       // var position = _finder.GetRandomPosition(_fieldBounds, food.Next.Size);
       var position = new Position(_fieldBounds.Size.Width / 2 - food.Next.Size.Width / 2 - 1, 0);
       food.Relocate(position);

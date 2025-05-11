@@ -72,14 +72,23 @@ public class Snake : ISegmentContainer
     return hasCollision;
   }
 
-  public void Grow()
+  public void Grow(int completedLines = 1)
   {
     var newSegments = new List<Position>();
-    newSegments.Add(_segments[0].Clone());
+    for (var i = 0; i < completedLines; i++)
+      newSegments.Add(_segments[0].Clone());
+
     newSegments.AddRange(_segments);
     _segments = newSegments;
+
     MoveBody();
     MoveHead();
+  }
+
+  public void Delete(int segments)
+  {
+    while (segments-- > 0)
+      _segments.RemoveAt(0);
   }
 
   public bool Dead()
@@ -160,4 +169,5 @@ public class Snake : ISegmentContainer
         return _direction;
     }
   }
+
 }

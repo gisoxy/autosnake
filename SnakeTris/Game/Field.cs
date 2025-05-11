@@ -27,10 +27,18 @@ public class Field : ISegmentContainer
       batch.Pixel(item.X, item.Y, PixelColor.Yellow, local: true);
   }
 
-  public void AttachBlock(IEnumerable<Position> block)
+  public int AttachSnake(IEnumerable<Position> snake)
+  {
+    var all = _blocks.Concat(snake).ToList();
+    var linesRemoved = RemoveLines(all);
+    return linesRemoved;
+  }
+
+  public int AttachBlock(IEnumerable<Position> block)
   {
     _blocks.AddRange(block);
-    RemoveLines();
+    var linesRemoved = RemoveLines(_blocks);
+    return linesRemoved;
   }
 
   public Rectangle GetBounds()
@@ -48,9 +56,9 @@ public class Field : ISegmentContainer
     return _blocks.Any(x => x == position);
   }
 
-  private void RemoveLines(int blocksPerLine = 10)
+  private int RemoveLines(List<Position> segments, int blocksPerLine = 10)
   {
-    var countByLine = _blocks
+    var countByLine = segments
       .GroupBy(x => x.Y)
       .ToDictionary(x => x.Key, x => x.Count());
 
@@ -69,5 +77,7 @@ public class Field : ISegmentContainer
           x.Y++;
       });
     }
+
+    return linesToRemove.Count;
   }
 }

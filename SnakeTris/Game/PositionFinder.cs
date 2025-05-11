@@ -40,10 +40,6 @@ public class PositionFinder
     if (nextPositions.Intersect(fieldContainer.GetSegments()))
       return PositionStatus.UsedByField;
 
-    var snakeContainer = _containers.First(x => x.Type == SegmentType.SnakeSegments);
-    if (nextPositions.Intersect(snakeContainer.GetSegments()))
-      return PositionStatus.UserBySnake;
-
     return PositionStatus.Free;
   }
 }
